@@ -4,37 +4,34 @@ Projeto do jogo **Arquipélago Perdido RPG** desenvolvido em **Unity**.
 
 ## Visão geral
 
-Este repositório contém a nova versão do projeto em Unity, organizada para evolução contínua do jogo com foco em estrutura limpa, versionamento correto e separação entre assets do projeto e pacotes externos.
+Este repositório contém a nova versão do projeto em Unity, organizada para facilitar a evolução do jogo com uma estrutura mais limpa, versionamento correto e separação entre assets do projeto e pacotes externos.
 
 ## Estrutura principal
 
-- `Assets/` → arquivos do projeto, cenas, scripts, prefabs, materiais e pacotes utilizados
+- `Assets/` → cenas, scripts, prefabs, materiais, UI e pacotes usados no projeto
 - `Packages/` → dependências do Unity
 - `ProjectSettings/` → configurações do projeto
-- `.gitignore` → exclusões importantes para Unity e arquivos locais
+- `.gitignore` → exclusões de cache, builds e arquivos locais
+- `README.md` → documentação inicial do projeto
 
 ## Organização em Assets
 
-A pasta principal de desenvolvimento do jogo é:
+A pasta principal de desenvolvimento é:
 
 - `Assets/_Project/`
 
-Dentro dela, a ideia é centralizar:
-- `Scenes/`
-- `Scripts/`
-- `Prefabs/`
-- `Materials/`
-- `Animations/`
-- `Audio/`
-- `UI/`
+Estrutura sugerida:
 
-## Objetivo
-
-Construir a base do jogo em Unity com uma arquitetura mais organizada, facilitando:
-- desenvolvimento incremental
-- versionamento no GitHub
-- manutenção futura
-- expansão para novos sistemas
+- `Assets/_Project/Scenes`
+- `Assets/_Project/Scripts`
+- `Assets/_Project/Prefabs`
+- `Assets/_Project/Materials`
+- `Assets/_Project/Animations`
+- `Assets/_Project/Audio`
+- `Assets/_Project/UI`
+- `Assets/_Project/Art`
+- `Assets/_Project/Resources`
+- `Assets/_Project/Editor`
 
 ## Tecnologias
 
@@ -43,9 +40,17 @@ Construir a base do jogo em Unity com uma arquitetura mais organizada, facilitan
 - Input System
 - TextMesh Pro
 
+## Objetivo
+
+Construir a base do jogo em Unity com uma arquitetura organizada, facilitando:
+- desenvolvimento incremental
+- manutenção futura
+- versionamento no GitHub
+- expansão para novos sistemas e mecânicas
+
 ## Observações
 
-Este repositório ignora arquivos temporários e de cache do Unity, como:
+O repositório ignora arquivos temporários e de cache do Unity, como:
 - `Library/`
 - `Temp/`
 - `Logs/`
@@ -58,7 +63,7 @@ Também foram removidos assets pesados de demonstração que não fazem parte do
 
 ## Próximos passos
 
-- organizar a estrutura interna de `Assets/_Project`
-- criar as cenas principais
+- organizar as cenas principais
+- definir a estrutura base de scripts
 - implementar movimentação do player
-- definir câmera, UI e arquitetura base dos sistemas
+- configurar câmera, UI e fluxo inicial do jogo
