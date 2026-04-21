@@ -5,10 +5,17 @@
 [Bb]uilds/
 [Ll]ogs/
 UserSettings/
+MemoryCaptures/
+Recordings/
+
+.vscode/
+.idea/
+.vs/
 
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user
@@ -16,7 +23,18 @@ UserSettings/
 *.pidb
 *.booproj
 *.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+*.code-workspace
 
 .DS_Store
 Thumbs.db
+
 Assets/TerrainDemoScene_URP/
+Assets/_Recovery/
+Assets/TutorialInfo/
+Assets/Readme.asset
+Assets/Readme.asset.meta
