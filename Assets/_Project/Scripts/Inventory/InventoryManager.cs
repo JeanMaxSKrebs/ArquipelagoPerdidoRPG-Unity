@@ -65,19 +65,21 @@ namespace ArquipelagoPerdidoRPG.Inventory
                 EnsureInventoryUiRoot();
             }
 
-            // No Tutorial, bloqueia completamente a abertura do inventário via tecla
             Scene currentScene = SceneManager.GetActiveScene();
-            if (currentScene.name == SceneNames.Tutorial)
+
+            if (IsToggleKeyPressed())
             {
-                if (IsToggleKeyPressed())
+                if (currentScene.name == SceneNames.Tutorial)
                 {
-                    // Tecla I pressionada mas inventário bloqueado no Tutorial
-                    // Silenciosamente ignora
+                    if (CanOpen || IsOpen)
+                    {
+                        ToggleInventoryFromInput();
+                    }
                 }
-            }
-            else if (IsToggleKeyPressed())
-            {
-                ToggleInventoryFromInput();
+                else
+                {
+                    ToggleInventoryFromInput();
+                }
             }
 
             SyncDebugState();
@@ -403,61 +405,61 @@ namespace ArquipelagoPerdidoRPG.Inventory
             return hasGameplaySceneLoaded;
         }
 
-            private static bool IsToggleKeyPressed()
-            {
-        #if ENABLE_INPUT_SYSTEM
+        private static bool IsToggleKeyPressed()
+        {
+#if ENABLE_INPUT_SYSTEM
                 Keyboard keyboard = Keyboard.current;
                 return keyboard != null && keyboard.iKey.wasPressedThisFrame;
-        #else
-                return Input.GetKeyDown(KeyCode.I);
-        #endif
+#else
+            return Input.GetKeyDown(KeyCode.I);
+#endif
+        }
+
+        private void SyncDebugState()
+        {
+            _debugIsOpen = IsOpen;
+            _debugCanOpen = CanOpen;
+            _debugSceneAllowsInventory = _sceneAllowsInventory;
+        }
+
+        private static void EnsureInventoryUiRoot()
+        {
+            if (UnityEngine.Object.FindAnyObjectByType<InventoryUI>() != null)
+            {
+                return;
             }
 
-                private void SyncDebugState()
-                {
-                    _debugIsOpen = IsOpen;
-                    _debugCanOpen = CanOpen;
-                    _debugSceneAllowsInventory = _sceneAllowsInventory;
-                }
+            GameObject canvasObj = GameObject.Find("Canvas_Inventory");
+            if (canvasObj == null)
+            {
+                canvasObj = new GameObject("Canvas_Inventory", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+            }
 
-                private static void EnsureInventoryUiRoot()
-                {
-                    if (UnityEngine.Object.FindAnyObjectByType<InventoryUI>() != null)
-                    {
-                        return;
-                    }
+            Canvas canvas = canvasObj.GetComponent<Canvas>();
+            if (canvas == null)
+            {
+                canvas = canvasObj.AddComponent<Canvas>();
+            }
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-                    GameObject canvasObj = GameObject.Find("Canvas_Inventory");
-                    if (canvasObj == null)
-                    {
-                        canvasObj = new GameObject("Canvas_Inventory", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-                    }
+            CanvasScaler scaler = canvasObj.GetComponent<CanvasScaler>();
+            if (scaler == null)
+            {
+                scaler = canvasObj.AddComponent<CanvasScaler>();
+            }
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
 
-                    Canvas canvas = canvasObj.GetComponent<Canvas>();
-                    if (canvas == null)
-                    {
-                        canvas = canvasObj.AddComponent<Canvas>();
-                    }
-                    canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            if (canvasObj.GetComponent<GraphicRaycaster>() == null)
+            {
+                canvasObj.AddComponent<GraphicRaycaster>();
+            }
 
-                    CanvasScaler scaler = canvasObj.GetComponent<CanvasScaler>();
-                    if (scaler == null)
-                    {
-                        scaler = canvasObj.AddComponent<CanvasScaler>();
-                    }
-                    scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                    scaler.referenceResolution = new Vector2(1920f, 1080f);
-                    scaler.matchWidthOrHeight = 0.5f;
-
-                    if (canvasObj.GetComponent<GraphicRaycaster>() == null)
-                    {
-                        canvasObj.AddComponent<GraphicRaycaster>();
-                    }
-
-                    if (canvasObj.GetComponent<InventoryUI>() == null)
-                    {
-                        canvasObj.AddComponent<InventoryUI>();
-                    }
-                }
+            if (canvasObj.GetComponent<InventoryUI>() == null)
+            {
+                canvasObj.AddComponent<InventoryUI>();
+            }
+        }
     }
 }

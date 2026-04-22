@@ -13,7 +13,7 @@ namespace ArquipelagoPerdidoRPG.World
         [SerializeField] private int alphamapResolution = 512;
 
         [Header("Generation")]
-        [SerializeField] private bool generateOnStart = true;
+        [SerializeField] private bool generateOnStart = false;
         [SerializeField] private Transform terrainParent;
 
         private readonly Dictionary<Vector2Int, Terrain> _generatedTerrains = new Dictionary<Vector2Int, Terrain>();

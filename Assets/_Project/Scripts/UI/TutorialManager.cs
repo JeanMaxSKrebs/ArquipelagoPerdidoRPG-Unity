@@ -70,7 +70,7 @@ namespace ArquipelagoPerdidoRPG.UI
             AutoResolveReferences();
             EnsureDefaultSteps();
             CacheStepIndices();
-            EnsureTutorialEnvironmentFallback();
+            // EnsureTutorialEnvironmentFallback();
             EnsureTutorialPlayerMovementFallback();
             CacheTargets();
             SetContinueAvailability(false);

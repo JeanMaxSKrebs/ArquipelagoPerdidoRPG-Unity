@@ -82,7 +82,7 @@ namespace ArquipelagoPerdidoRPG.Core
 
             if (scene.name == SceneNames.Tutorial)
             {
-                EnsureTutorialEnvironmentFallback();
+                // EnsureTutorialEnvironmentFallback();
             }
 
             UpdateGameplayInputState();

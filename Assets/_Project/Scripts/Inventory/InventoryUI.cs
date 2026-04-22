@@ -30,54 +30,17 @@ namespace ArquipelagoPerdidoRPG.Inventory
 
         private void Awake()
         {
-            // Force reset completo
-            if (panelRoot != null)
-            {
-                panelRoot.SetActive(false);
-            }
-            
             BuildRuntimeLayoutIfMissing();
             AutoResolveReferences();
             WireCategoryButtons();
             _canvas = GetComponent<Canvas>();
-            
-            // Desativa canvas se for Tutorial (bloqueia completamente)
-            Scene activeScene = SceneManager.GetActiveScene();
-            if (activeScene.name == Core.SceneNames.Tutorial && _canvas != null)
-            {
-                _canvas.enabled = false;
-            }
-            
+
             SetPanelActive(false);
             ApplySceneVisibility();
         }
 
         private void OnEnable()
         {
-            // Force reset se Tutorial
-            Scene activeScene = SceneManager.GetActiveScene();
-            if (activeScene.name == Core.SceneNames.Tutorial)
-            {
-                if (_canvas != null)
-                {
-                    _canvas.enabled = false;
-                }
-                if (panelRoot != null)
-                {
-                    panelRoot.SetActive(false);
-                }
-                
-                // Desabilita listeners para não reagir a eventos
-                if (InventoryManager.Instance != null)
-                {
-                    InventoryManager.Instance.OnInventoryStateChanged -= OnInventoryStateChanged;
-                    InventoryManager.Instance.OnCategoryChanged -= OnCategoryChanged;
-                    InventoryManager.Instance.OnItemSelected -= OnItemSelected;
-                    InventoryManager.Instance.OnInventoryChanged -= OnInventoryChanged;
-                }
-                return; // Sai daqui, não registra listeners
-            }
-            
             SceneManager.sceneLoaded += OnSceneLoaded;
 
             if (InventoryManager.Instance != null)
@@ -90,26 +53,18 @@ namespace ArquipelagoPerdidoRPG.Inventory
 
             if (closeButton != null)
             {
+                closeButton.onClick.RemoveListener(OnClosePressed);
                 closeButton.onClick.AddListener(OnClosePressed);
             }
 
             if (consumeButton != null)
             {
+                consumeButton.onClick.RemoveListener(OnConsumePressed);
                 consumeButton.onClick.AddListener(OnConsumePressed);
             }
 
             ApplySceneVisibility();
             RefreshAll();
-        }
-
-        private void Update()
-        {
-            // Force painel fechado no Tutorial (estado residual failsafe)
-            Scene activeScene = SceneManager.GetActiveScene();
-            if (activeScene.name == Core.SceneNames.Tutorial && panelRoot != null && panelRoot.activeSelf)
-            {
-                panelRoot.SetActive(false);
-            }
         }
 
         private void OnDisable()
@@ -146,17 +101,8 @@ namespace ArquipelagoPerdidoRPG.Inventory
                 return;
             }
 
-            // No Tutorial, força painel fechado
-            Scene activeScene = SceneManager.GetActiveScene();
-            if (activeScene.name == Core.SceneNames.Tutorial)
-            {
-                SetPanelActive(false);
-            }
-            else
-            {
-                SetPanelActive(manager.IsOpen && IsInventoryVisibleInCurrentContext());
-            }
-            
+            SetPanelActive(manager.IsOpen && IsInventoryVisibleInCurrentContext());
+
             RebuildSlots(manager);
             RefreshDetails(manager.SelectedItem);
             RefreshCategoryVisual(manager.SelectedCategory);
@@ -262,13 +208,6 @@ namespace ArquipelagoPerdidoRPG.Inventory
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             ApplySceneVisibility();
-            
-            // Force fechar no Tutorial
-            if (scene.name == Core.SceneNames.Tutorial && panelRoot != null)
-            {
-                panelRoot.SetActive(false);
-            }
-            
             RefreshAll();
         }
 
@@ -373,38 +312,7 @@ namespace ArquipelagoPerdidoRPG.Inventory
             }
         }
 
-        public void EnableForInventoryStep()
-        {
-            if (_canvas != null)
-            {
-                _canvas.enabled = true;
-            }
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
-            if (InventoryManager.Instance != null)
-            {
-                InventoryManager.Instance.OnInventoryStateChanged += OnInventoryStateChanged;
-                InventoryManager.Instance.OnCategoryChanged += OnCategoryChanged;
-                InventoryManager.Instance.OnItemSelected += OnItemSelected;
-                InventoryManager.Instance.OnInventoryChanged += OnInventoryChanged;
-            }
-
-            if (closeButton != null)
-            {
-                closeButton.onClick.AddListener(OnClosePressed);
-            }
-
-            if (consumeButton != null)
-            {
-                consumeButton.onClick.AddListener(OnConsumePressed);
-            }
-
-            ApplySceneVisibility();
-            RefreshAll();
-        }
-
-        public void DisableForTutorial()
+        public void ForcePanelClosed()
         {
             SetPanelActive(false);
         }
